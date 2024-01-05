@@ -1,0 +1,55 @@
+hydra:
+  output_subdir: null  
+  run:
+    dir: .
+
+model:
+  - XNet
+#  - EModel
+#  - convnext_large
+#  - XResnet50
+#  - mobilenet_v2
+#  - mobilenet_v3
+#  - MNASNet
+#  - vgg19
+#  - resnet50
+#  - resnext50_32x4d
+#  - densenet201
+
+model_params:
+  num_class: 2
+  image_size: 256
+
+training:
+  _target_: utils.trainer.executor
+  path_dataset_train: data/processed/train/
+  path_dataset_val: data/processed/val/
+  batch_size: 4
+  num_threads: 1
+  device_id: 0
+  num_epochs: 500
+  lr: 0.001
+  patience: 10
+  opt_func: Adamax   # Adam, RMSprop, SGD, Adagrad, Adadelta, Adamax
+  criterion: CrossEntropyLoss # CrossEntropyLoss
+  normalize: True
+  neptune_ai: False
+  neptune_ai_desc:  raw
+  tensor_board: False
+  #evaluation
+  path_testset: data/processed/val
+  save_path: models
+  path_pth: models
+  load_w: False
+
+evaluation:
+  _target_: utils.predictor.executor
+  path_testset: data/processed/val
+  save_path: models
+  path_pth: models # XNet.pth, EModel.pth, ...
+  normalize: True
+  path_trainset: data/processed/train # if normalization=true will use
+  product: True
+
+defaults:
+  - _self_
