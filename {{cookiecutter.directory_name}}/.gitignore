@@ -91,3 +91,10 @@ target/
 
 # Hydra logs
 outputs
+
+*.lock
+data/*
+models/*
+.neptune/*
+mlartifacts/*
+mlruns/*
